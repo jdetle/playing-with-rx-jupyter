@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '../static/index.css';
-import Content from './components/content';
+import App from './components/App';
 const Rx = require('rxjs/Rx');
 global.Rx = Rx;
 
@@ -88,36 +88,13 @@ export const poll = (obs, interval) => {
   )
 }
 
-const kernel$ = poll(jupyter.kernels.list(serverConfig), 500);
-const content$ = poll(jupyter.contents.get(serverConfig, ""), 500);
+const kernel$ = poll(jupyter.kernels.list(serverConfig), 2000);
+const content$ = poll(jupyter.contents.get(serverConfig, ""), 2000);
 
 const state$ = Rx.Observable.combineLatest(version, kernel$, content$,
   (version, kernels, contents) => ({ version: version.response.version, kernels: kernels.response, contents: contents.response }));
 
 const root = document.getElementById('root');
-
-const App = (props) =>
-  <div>
-    <pre>Version: {props.version}</pre>
-    {
-      props.kernels && props.kernels.length > 0 ? (
-        <div>
-        <h2>Kernels</h2>
-          { props.kernels.map(kernel =>
-            <pre key={kernel.id}>{kernel.id}</pre>
-          )}
-        </div>
-      ) : null
-    }
-    {
-      props.contents ? (
-        <div>
-        <h2>Content!</h2>
-        <Content contents={props.contents} />
-        </div>
-      ) : null
-    }
-  </div>
 
 state$
   .subscribe(({ version, kernels, contents }) => {

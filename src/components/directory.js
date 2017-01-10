@@ -1,6 +1,7 @@
 import React from 'react';
 const jupyter = require('rx-jupyter');
-import { poll } from '../App';
+import { poll } from '../index';
+import '../../static/Directory.css';
 const serverConfig = {
   endpoint: "http://127.0.0.1:8888",
   crossDomain: true,
@@ -14,12 +15,13 @@ export default class  Directory extends React.Component {
   };
 
   showContents(path) {
-    const content$ = poll(jupyter.contents.get(serverConfig, path), 500);
+    console.log(path)
+    const content$ = poll(jupyter.contents.get(serverConfig, path), 1000);
     return content$;
   }
 
   render() {
-    return (<ul>
+    return (<ul className="directory">
     {
       this.props.content.map(entry => {
         let icon = ".";
@@ -38,7 +40,7 @@ export default class  Directory extends React.Component {
             break;
         }
         return (
-          <li onClick={this.showContents} key={entry.name}>{icon} {entry.name}</li>
+          <li onClick={() => this.showContents(entry.name)} key={entry.name}>{icon} {entry.name}</li>
         );
       }
       )

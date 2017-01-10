@@ -1,0 +1,15 @@
+.directory {
+  height: 400px;
+  width: 80%;
+  margin: 2px;
+  overflow-y: scroll;
+}
+
+li {
+  height: 25px;
+  border-top: solid 1px #e6e6e6;
+  padding: 2px;
+}
+li:hover {
+  background: #f2f2f2;
+}
